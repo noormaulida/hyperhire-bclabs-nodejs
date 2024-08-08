@@ -8,6 +8,7 @@ import {
   Put,
   Delete,
 } from '@nestjs/common';
+import { ApiService } from './api.service';
 import { ConversationService } from './conversation.service';
 import { ChatService } from './chat.service';
 import { Conversation as ConvoModel, Chat as ChatModel } from '@prisma/client';
@@ -15,6 +16,7 @@ import { Conversation as ConvoModel, Chat as ChatModel } from '@prisma/client';
 @Controller()
 export class AppController {
   constructor(
+    private apiService: ApiService,
     private readonly conversationService: ConversationService,
     private readonly chatService: ChatService,
   ) {}
@@ -34,26 +36,28 @@ export class AppController {
   @Post('conversations')
   async sendRequestToLLM(
     @Body() data: { title: string; model: string, questions: string[] },
-  ): Promise<ConvoModel> {
+  ): Promise<any> {
     const { title, model, questions } = data;
     const newConvo = this.conversationService.createConversation({
       title,
       model
     });
     const newConvoId = ((await newConvo).id)
-
-    // Integration API here
-    // 
-
-    questions.forEach(question => {
-      this.chatService.createChat({
-        question,
-        answer: 'Temp answer',
-        conversation: {
-          connect: { id: newConvoId }
-        }
-      });
-    });
-    return newConvo
+    
+    // Integration API
+    const response = await this.apiService.getChatbotResponse({model, questions});
+    if (response) {
+      for await (const result of response.results) {
+          await this.chatService.createChat({
+            question: result.question,
+            answer: result.answer,
+            conversation: {
+              connect: { id: newConvoId }
+            }
+          });
+      };
+    }
+    // End of Integration API
+    return this.getConvoById(String(newConvoId));
   }
 }

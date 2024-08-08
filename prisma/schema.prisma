@@ -15,7 +15,7 @@ datasource db {
 
 model Conversation {
   id    Int     @default(autoincrement()) @id
-  title String  @unique
+  title String
   model  String
   chats Chat[]
   createdAt       DateTime @default(now())
