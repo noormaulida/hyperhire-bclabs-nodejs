@@ -11,7 +11,7 @@ import {
 import { ApiService } from './api.service';
 import { ConversationService } from './conversation.service';
 import { ChatService } from './chat.service';
-import { Conversation as ConvoModel, Chat as ChatModel } from '@prisma/client';
+import { Conversation as ConvoModel } from '@prisma/client';
 
 @Controller()
 export class AppController {

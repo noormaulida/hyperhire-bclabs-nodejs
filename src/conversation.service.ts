@@ -40,21 +40,4 @@ export class ConversationService {
       data,
     });
   }
-
-  async updateConversation(params: {
-    where: Prisma.ConversationWhereUniqueInput;
-    data: Prisma.ConversationUpdateInput;
-  }): Promise<Conversation> {
-    const { where, data } = params;
-    return this.prisma.conversation.update({
-      data,
-      where,
-    });
-  }
-
-  async deleteConversation(where: Prisma.ConversationWhereUniqueInput): Promise<Conversation> {
-    return this.prisma.conversation.delete({
-      where,
-    });
-  }
 }
