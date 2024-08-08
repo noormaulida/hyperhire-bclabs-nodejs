@@ -9,7 +9,7 @@ RUN npm install
 COPY . .
 
 
-COPY .env ./.env
+COPY .env.example ./.env
 
 RUN npx prisma generate
 COPY prisma ./prisma/
