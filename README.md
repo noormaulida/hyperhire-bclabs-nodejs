@@ -1,6 +1,6 @@
-# Distributed LLM Assessment
+# Distributed LLM Frontend
 
-This projects build for Distributed LLM Assesment using NestJS and PostgreSQL.
+This projects build for Distributed LLM using NestJS and PostgreSQL.
 
 ## Libraries:
 
